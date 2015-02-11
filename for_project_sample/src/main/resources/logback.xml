@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- configuration file for LogBack (slf4J implementation)
-See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
-<configuration scan="true" scanPeriod="30 seconds">
-
-    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
-        <resetJUL>true</resetJUL>
-    </contextListener>
-
-    <!-- To enable JMX Management -->
-    <jmxConfigurator/>
-
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%-5level %logger{0} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-	<!--<logger name="org.hibernate" level="debug"/> -->
-   <!-- Uncomment and add your logger here:
-    <logger name="org.springframework.samples.service.service" level="debug"/> -->
-         
-    <root level="info">
-        <appender-ref ref="console"/>
-    </root>
-</configuration>
+<configuration>
+	<!-- 콘솔 로그 -->
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder>
+<!--     <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern> -->
+    <pattern>[%d{yy-MM-dd HH:mm:ss}] [%5p] [%c{1}.%M-%3L] %m %n</pattern>
+  </encoder>
+</appender>
+	<!-- 날짜별 로그 -->
+	<appender name="dailyout" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logFile.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 특정 로거 설정 -->
+<!-- 	<logger name="org.springframework" level="TRACE" >
+		<appender-ref ref="dailyout" />
+		<appender-ref ref="STDOUT" />
+	</logger> -->
+	<!-- root 로거 기본 설정 -->
+	<root level="TRACE">
+		<appender-ref ref="STDOUT" />
+<!-- 		<appender-ref ref="dailyout" /> -->
+	</root>
+</configuration> 
